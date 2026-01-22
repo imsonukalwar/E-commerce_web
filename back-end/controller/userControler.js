@@ -435,13 +435,13 @@ if (!loggedInUser) {
     address,
     city,
     zipCode,
-    phoneN,
+    phoneNo,
     } = req.body;
 
     //  Authorization check
     if (
     loggedInUser._id.toString() !== userIdToUpdate &&
-    loggedInUser.role !== "admin"
+    loggedInUser.role !== 'admin'
     ) {
     return res.status(403).json({
         success: false,
@@ -457,7 +457,7 @@ if (!loggedInUser) {
         });
         }
 
-    let profilePicUrl = user1.profilePic;
+    let profilePicUrl = user.profilePic;
     let profilePicPublicId = user1.profilePicPublicId;
 
     //  If new image uploaded
@@ -487,9 +487,10 @@ if (!loggedInUser) {
     user.address = address || user.address;
     user.city = city || user.city;
     user.zipCode = zipCode || user.zipCode;
-    user.phoneN = phoneN || user.phoneN;
+    user.phoneN = phoneNo || user.phoneNo;
     user.profilePic = profilePicUrl;
     user.profilePicPublicId = profilePicPublicId;
+    user.profilePicPublicId=role;
 
     //  Role update only admin can do
     // if (loggedUser.role === "admin" && req.body.role) {
@@ -501,7 +502,7 @@ if (!loggedInUser) {
 
     return res.status(200).json({
         success: true,
-        message: "Profile updated successfully",
+        message: "Profile Updated Successfully",
         user: user,
     });
     } catch (error) {
