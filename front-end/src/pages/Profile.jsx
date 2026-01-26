@@ -16,21 +16,21 @@ import { useParams } from "react-router-dom";
 import userLogo from "../assets/user.jpg";
 import { toast } from "sonner";
 import axios from "axios";
-import { setuser } from "@/redux/userSlice";
+import { setUser } from "@/redux/userSlice";
+import { Loader2 } from "lucide-react";
 
 
 
 const Profile = () => {
-    // const{user}=useSelector(store.user)
     const { user } = useSelector((state) => state.user)
-
+    const [loading,setloading]=useState(false);
     const params=useParams()
-    const userid=params.userId
-    const[updateUser,setupdateUser]=useState({
+    const userId=params.userId
+    const[updateUser,setUpdateUser]=useState({
         firstName:user?.firstName,
         lastName:user?.lastName,
         email:user?.email,
-        phoneN:user?.phoneN,
+        phoneNo:user?.phoneNo,
         address:user?.address,
         city:user?.city,
         zipCode:user?.zipCode,
@@ -42,38 +42,39 @@ const Profile = () => {
     const [file,setFile]=useState(null)
     const Dispatch=useDispatch()
     const handleChange=(e)=>{
-        setupdateUser({...updateUser,[e.target.name]:e.target.value})
+        setUpdateUser({...updateUser,[e.target.name]:e.target.value})
     }
-    const handlefileChange=(e)=>{
+    const handleFileChange=(e)=>{
         const selectedFile = e.target.files[0];
         setFile(selectedFile)
-        setupdateUser({...updateUser,profilePic: URL.createObjectURL(selectedFile)})
+        setUpdateUser({...updateUser,profilePic: URL.createObjectURL(selectedFile)})
     }
     const handleSubmit=async(e)=>{
         e.preventDefault()
-        const AccessToken=localStorage.getItem("AccessToken")
+        const accessToken=localStorage.getItem("accessToken")
         try {
             const formData=new FormData()
             formData.append("firstName",updateUser.firstName)
             formData.append("lastName",updateUser.lastName)
             formData.append("email",updateUser.email)
-            formData.append("phoneN",updateUser.phoneN)
+            formData.append("phoneNo",updateUser.phoneNo)
             formData.append("address",updateUser.address)
             formData.append("city",updateUser.city)
             formData.append("zipCode",updateUser.zipCode)
-            formData.append("role",updateUser.role)
+            // formData.append("role",updateUser.role)
             if(file){
                 formData.append("file",file)//image file for backend multer
             }
-            const res=await axios.put(`http://localhost:8000/update/${userid}`,formData,{
+            setloading(true)
+            const res=await axios.put(`http://localhost:8000/update/${userId}`,formData,{
                 headers:{
-                    Authorization:`Bearer ${AccessToken}`,
-                    "content-type":"multipart/form-data"
+                    Authorization:`Bearer ${accessToken}`,
+                    // "content-type":"multipart/form-data"
                 }
             })
             if(res.data.success){
                 toast.success(res.data.message)
-                Dispatch(setuser(res.data.user))
+                Dispatch(setUser(res.data.user))
                 localStorage.setItem("user", JSON.stringify(res.data.user));
 
             }
@@ -81,7 +82,7 @@ const Profile = () => {
             console.log(error);
             toast.error("Field to update Profile")
             
-        }
+        }finally{setloading(false)}
     }
 return (
     <div className="pt-20 min-h-screen bg-gray-300">
@@ -102,7 +103,7 @@ return (
                     alt="profile"
                     className="w-32 h-32 mx-auto rounded-full object-cover border-4 border-pink-800"/>
                 <Label className='mt-4 cursor-pointer bg-pink-700 text-white px-4 py-2 rounded hover:bg-pink-700 '> Cange Picture
-                    <input onChange={handlefileChange} type='file' accept='image/*' className="hidden "/>
+                    <input onChange={handleFileChange} type='file' name="file" accept='image/*' className="hidden "/>
                 </Label>
                 </div>
                 {/* profile form */}
@@ -123,7 +124,7 @@ return (
                         </div>
                         <div>
                         <Label className='block text-sm font-medium'>Phone Number</Label>
-                        <input type="text" value={updateUser.phoneN} onChange={handleChange}  name="phoneN" placeholder="Enter your contact number" 
+                        <input type="text" value={updateUser.phoneNo} onChange={handleChange}  name="phoneNo" placeholder="Enter your contact number" 
                         className="w-full border rounded-1g px-3 py-3 mt-1 bg-pink-100 cursor-pointer"/>
                         </div>
                         <div>
@@ -143,7 +144,13 @@ return (
                         className="w-full border rounded-1g px-3 py-3 mt-1 bg-pink-100 cursor-pointer"/>
                         </div>
                         </div>
-                        <Button type="submit" className='hover:bg-pink-700 w-full mt-4 bg-pink-600 text-white font-semibold py-2 rounded-1g cursor-pointer'>Apdate Profile</Button>
+                        <Button type="submit" className='hover:bg-pink-700 w-full mt-4 bg-pink-600 text-white font-semibold py-2 rounded-1g cursor-pointer'>
+                            {loading ? (
+                            <>
+                            <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                            Please wait</>) : ("Login")}
+                            (Apdate Profile)
+                            </Button>
                     </form>
                 </div>
             </div>

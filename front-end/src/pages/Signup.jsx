@@ -35,10 +35,10 @@ const handlechange=(e)=>{
 }
 const submithandler=async(e)=>{
         e.preventDefault();
-        console.log(FormData);
+        console.log(formData);
         try {
             setloading(true)
-            const res=await axios.post("http://localhost:8000/register",FormData,{
+            const res=await axios.post("http://localhost:8000/register",formData,{
                 "content-type":"application/json"
             })
             if(res.data.success){
@@ -56,22 +56,44 @@ const submithandler=async(e)=>{
     }
 
 return (
-    <div className="flex justify-center items-center min-h-screen bg-pink-100">
-        <Card className="w-full max-w-sm">
-        <CardHeader>
-        <CardTitle>Create your account</CardTitle>
-        <CardDescription>
-        Enter your detailes below to create to your account
+<div className="relative min-h-screen flex items-center justify-center
+    bg-gradient-to-br from-pink-100   px-4 overflow-hidden">
+
+    {/* Floating blobs */}
+    <div className="absolute -top-24 -left-24 w-72 h-72 rounded-full opacity-30 blur-3xl animate-pulse"></div>
+    <div className="absolute top-1/2 -right-24 w-72 h-72  rounded-full opacity-30 blur-3xl animate-pulse"></div>
+
+    <Card
+      className="
+        relative
+        w-full max-w-sm
+        bg-white/80 backdrop-blur-xl
+        border border-white/40
+        rounded-3xl
+        shadow-xl
+        transition-all duration-500
+        hover:scale-102 hover:shadow-2xl
+      "
+    >
+      <CardHeader className="text-center space-y-2">
+        <CardTitle className="text-2xl font-bold text-gray-800">
+          Create your account ✨
+        </CardTitle>
+        <CardDescription className="text-gray-600">
+          Enter your details to get started
         </CardDescription>
-        </CardHeader>
-        <CardContent>
+      </CardHeader>
 
-        <div className="flex flex-col gap-3">
+      <CardContent>
+        <div className="flex flex-col gap-4">
 
-            <div className="grid grid-cols-2 gap-4">
-                <div className="grid gap-2">
-                    <Label htmlFor="firstName">first Name</Label>
-                    <Input
+          {/* First & Last name */}
+          <div className="grid grid-cols-2 gap-4">
+            <div className="grid gap-2">
+              <Label htmlFor="firstName" className="text-gray-700 font-medium">
+                First Name
+              </Label>
+              <Input
                 id="firstName"
                 name="firstName"
                 type="text"
@@ -79,11 +101,15 @@ return (
                 required
                 value={formData.firstName}
                 onChange={handlechange}
-            className="flex-col gap-2 hover:bg-gra"/>
-                </div>
-                <div className="grid gap-2">
-                <Label htmlFor="lastName">Last Name</Label>
-                <Input
+                className="rounded-xl bg-white/90 focus:ring-2 focus:ring-pink-400 transition"
+            />
+            </div>
+
+            <div className="grid gap-2">
+            <Label htmlFor="lastName" className="text-gray-700 font-medium">
+                Last Name
+            </Label>
+            <Input
                 id="lastName"
                 name="lastName"
                 type="text"
@@ -91,59 +117,99 @@ return (
                 required
                 value={formData.lastName}
                 onChange={handlechange}
-                />
-                </div>
-
-            </div>
-
-            <div className="grid gap-2">
-                    <Label htmlFor="email">Email</Label>
-                <Input
-                id="email"
-                name="email"
-                type="email"
-                placeholder="m@example.com"
-                required
-                value={formData.email}
-                onChange={handlechange}
+                className="rounded-xl bg-white/90 focus:ring-2 focus:ring-pink-400 transition"
             />
-                </div>
-            
-            <div className="grid gap-2">
-            <div className="flex items-center">
-                <Label htmlFor="password">Password</Label>
             </div>
+            </div>
+
+          {/* Email */}
+        <div className="grid gap-2">
+            <Label htmlFor="email" className="text-gray-700 font-medium">
+            Email
+            </Label>
+            <Input
+            id="email"
+            name="email"
+            type="email"
+            placeholder="m@example.com"
+            required
+            value={formData.email}
+            onChange={handlechange}
+            className="rounded-xl bg-white/90 focus:ring-2 focus:ring-pink-400 transition"
+            />
+        </div>
+
+          {/* Password */}
+        <div className="grid gap-2">
+            <Label htmlFor="password" className="text-gray-700 font-medium">
+            Password
+            </Label>
             <div className="relative">
             <Input
-            id="password"
-            name="password"
-            placeholder="create your password"
-            type={showpas?'text':'password'}
-            required
-            value={formData.password}
+                id="password"
+                name="password"
+                placeholder="Create your password"
+                type={showpas ? "text" : "password"}
+                required
+                value={formData.password}
                 onChange={handlechange}
+                className="rounded-xl bg-white/90 pr-10 focus:ring-2 focus:ring-pink-400 transition"
             />
 
-            {
-                showpas?<EyeOff onClick={()=>setshaowpas(false)} className="w-5 h-5 text-gray-700 absolute right-5 bottom-2"/>:
-                <Eye onClick={()=>setshaowpas(true)} className="w-5 h-5 text-gray-700 absolute right-5 bottom-2"/>
-            }
-            </div>
+            {showpas ? (
+                <EyeOff
+                onClick={() => setshaowpas(false)}
+                className="w-5 h-5 text-gray-600 absolute right-4 top-1/2 -translate-y-1/2 cursor-pointer hover:text-pink-600 transition"
+                />
+            ) : (
+                <Eye
+                onClick={() => setshaowpas(true)}
+                className="w-5 h-5 text-gray-600 absolute right-4 top-1/2 -translate-y-1/2 cursor-pointer hover:text-pink-600 transition"
+                />
+            )}
             </div>
         </div>
 
-        </CardContent>
-        <CardFooter className="flex-col gap-2">
-        <Button  type="submit" onClick={submithandler} className="w-full cursor-pointer bg-gray-500 hover:bg-gray-700">
-        {loading?<><Loader2 className="h-4 w-4 animate-spin mr-2"/>Please wait</>:'Signup'}
-        </Button>
-        <p className="text-gray-700 text-sm">Already have an account <Link to={'/login'} className="hover:underline cursor-pointer 
-        text-pink-700">login</Link></p>
-        </CardFooter>
-    </Card>
+        </div>
+    </CardContent>
 
-    </div>
-)
+    <CardFooter className="flex-col gap-3">
+        <Button
+        type="submit"
+        onClick={submithandler}
+        className="
+            w-full
+            rounded-xl
+            bg-gradient-to-r from-pink-500 to-purple-500
+            hover:from-pink-600 hover:to-purple-600
+            text-white
+            font-semibold cursor-pointer
+            transition-all duration-300"
+        >
+        {loading ? (
+            <>
+            <Loader2 className="h-4 w-4 animate-spin mr-2" />
+            Please wait
+            </>
+        ) : (
+            "Signup"
+        )}
+        </Button>
+
+        <p className="text-gray-700 text-sm">
+        Already have an account?{" "}
+        <Link
+            to="/login"
+            className="text-pink-600 font-semibold hover:underline"
+        >
+            Login
+        </Link>
+        </p>
+    </CardFooter>
+    </Card>
+</div>
+);
+
 }
 
 export default Signup
