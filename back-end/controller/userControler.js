@@ -357,68 +357,6 @@ const getUserById=async(req,res)=>{
     }
 }
 
-
-// const updateUser=async(req,res)=>{
-//     try {
-//         const useridUpdate=req.params.id;//the id of the user we want to update
-//         const logeduser=req.user1//from is authentication middleware
-//         const{firstName,lastName,address,city,zipCode,phoneN,role}=req.body
-//         if(logeduser._id.toString()!==useridUpdate&&logeduser.role !=='admin'){
-//         }{
-//             return res.status(403).json({
-//             success:false,
-//             message:"you are not apllicabe to update this profile",
-//             })
-//         }
-//         let user1=await user.findById(useridUpdate)
-//         if(!user1){
-//             return res.status(404).json({
-//             success:false,
-//             message:error.message,
-//             })
-//         }
-//         let profilepicurl=user1.profilepic;
-//         let profilepicPublicId=user1.profilepicpublicId;
-//         if(req.file){
-//             if(profilepicPublicId){
-//                 await cloudinary.uploader.destry(profilepicPublicId)
-//             }
-//             cosnt uploadResult=await new promises((resolve,reject)=>{
-//                 cosnt stream =cloudinary.uploader.upload_strea(
-//                     {folder:"profiles"},
-//                     (error,result)=>{
-//                         if(error) reject(error)
-//                             else resolve(result)
-//                     }
-//                 )
-//                 stream.end(req.file.buffer)
-//             })
-//             profilepicurl=uploadResult.secure_url;
-//             profilepicPublicId=uploadResult.public_id
-//         }
-//         user1.firstName=firstName||user1.firstName
-//         user1.lastName=lasstName||user1.lasstName
-//         user1.address=address||user1.address
-//         user1.city=city||user1.city
-//         user1.zipCode=zipCode||user1.zipCode
-//         user1.phoneN=phoneN||user1.phoneN
-//         user1.role=role
-//         user1.profilepic=profilepicurl
-//         user1.profilepicpublicId=profilepicPublicId
-
-//         const updauser=await user1.save()
-//         return res.status(200).json({
-//             success:true,
-//             message:"Profile update sucsessfull",
-//             })
-//     } catch (error) {
-//         return res.status(500).json({
-//             success:false,
-//             message:error.message,
-//             })
-//     }
-// }
-
 const updateUser = async (req, res) => {
 try {
     const userIdToUpdate = req.params.id;
@@ -436,7 +374,8 @@ if (!loggedInUser) {
     city,
     zipCode,
     phoneNo,
-    } = req.body;
+    role,
+    } = req.body||{};
 
     //  Authorization check
     if (
@@ -458,7 +397,7 @@ if (!loggedInUser) {
         }
 
     let profilePicUrl = user.profilePic;
-    let profilePicPublicId = user1.profilePicPublicId;
+    let profilePicPublicId = user.profilePicPublicId;
 
     //  If new image uploaded
     if (req.file) {
@@ -487,10 +426,10 @@ if (!loggedInUser) {
     user.address = address || user.address;
     user.city = city || user.city;
     user.zipCode = zipCode || user.zipCode;
-    user.phoneN = phoneNo || user.phoneNo;
+    user.phoneNo = phoneNo || user.phoneNo;
     user.profilePic = profilePicUrl;
     user.profilePicPublicId = profilePicPublicId;
-    user.profilePicPublicId=role;
+    user.role=role;
 
     //  Role update only admin can do
     // if (loggedUser.role === "admin" && req.body.role) {
@@ -503,7 +442,7 @@ if (!loggedInUser) {
     return res.status(200).json({
         success: true,
         message: "Profile Updated Successfully",
-        user: user,
+        user: updatedUser,
     });
     } catch (error) {
     return res.status(500).json({
