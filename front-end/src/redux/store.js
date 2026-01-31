@@ -28,8 +28,18 @@ const rootReducer=combineReducers({
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)
 
+// const store = configureStore({
+//   user:userSlice,
+//   reducer: persistedReducer,
+//   middleware: (getDefaultMiddleware) =>
+//     getDefaultMiddleware({
+//       serializableCheck: {
+//         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+//       },
+//     }),
+// })
+
 const store = configureStore({
-  user:userSlice,
   reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
@@ -38,5 +48,6 @@ const store = configureStore({
       },
     }),
 })
+
 
 export default store
