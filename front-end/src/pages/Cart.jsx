@@ -19,7 +19,7 @@ const { cart } = useSelector(store => store.product);
 const dispatch = useDispatch();
 const navigate = useNavigate();
 
-const API="http://localhost:8000/cart";
+const API=`${import.meta.env.VITE_URL}/cart`;
 const accessToken = localStorage.getItem("accessToken");
 
 const subTotal = cart?.totalPrice || 0;

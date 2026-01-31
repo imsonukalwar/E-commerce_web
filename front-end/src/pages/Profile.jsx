@@ -76,7 +76,7 @@ const Profile = () => {
       setLoading(true);
 
       const res = await axios.put(
-        `http://localhost:8000/update/${userId}`,
+        `${import.meta.env.VITE_URL}/update/${userId}`,
         formData,
         {
           headers: {
@@ -91,7 +91,7 @@ const Profile = () => {
         localStorage.setItem("user", JSON.stringify(res.data.user));
       }
     } catch (err) {
-      toast.error("Failed to update profile");
+      toast.error("Failed to update profile",err);
     } finally {
       setLoading(false);
     }

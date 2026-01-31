@@ -9,7 +9,7 @@ const VerifyEmail = () => {
     const nevigate=useNavigate()
     const verifyEmail=async()=>{
         try {
-            const res= await axios.post('http://localhost:8000/Verify',{},{
+            const res= await axios.post(`${import.meta.env.VITE_URL}/Verify`,{},{
                 headers:{
                     Authorization:`Bearer ${token}`
                 }

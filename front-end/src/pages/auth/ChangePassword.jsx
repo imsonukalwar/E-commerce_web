@@ -178,7 +178,7 @@ const ChangePassword = () => {
 
     try {
       const res = await axios.post(
-        `http://localhost:8000/changePassword/${email}`,
+        `${import.meta.env.VITE_URL}/changePassword/${email}`,
         { newpassword, conformpassword }
       );
 

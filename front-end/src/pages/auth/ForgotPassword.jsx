@@ -71,23 +71,9 @@ const navigate=useNavigate()
     e.preventDefault();
     setLoading(true);
 
-    // try {
-    //   const res = await axios.post(
-    //     "http://localhost:8000/forgot-password",
-    //     { email }
-    //   );
-
-    //   alert(res.data.message);
-    //   navigate(`/verify-otp/${email}`);
-
-    // } catch (error) {
-    //   alert(error.response?.data?.message || "Error");
-    // } finally {
-      
-    
     try {
   const res = await axios.post(
-    "http://localhost:8000/forgot-password",
+    `${import.meta.env.VITE_URL}/forgot-password`,
     { email }
   );
 
@@ -104,67 +90,6 @@ const navigate=useNavigate()
 }setLoading(false);
     }
 
-//   return (
-
-
-  
-//     // <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-500 via-purple-500 to-indigo-600">
-//     <motion.div
-//   initial={{ opacity: 0, scale: 0.8, y: 40 }}
-//   animate={{ opacity: 1, scale: 1, y: 0 }}
-//   transition={{ duration: 0.6 }}
-//   className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-200 via-pink-100 to-indigo-100"
-// >
-
-
-//       <motion.div
-//         initial={{ opacity: 0, scale: 0.8, y: 40 }}
-//         animate={{ opacity: 1, scale: 1, y: 0 }}
-//         transition={{ duration: 0.6 }}
-//       >
-//         <Card className="w-[380px] rounded-2xl shadow-2xl">
-
-//           <CardHeader className="text-center space-y-2">
-//             <div className="mx-auto w-14 h-14 rounded-full bg-pink-600 flex items-center justify-center animate-bounce">
-//               <Mail className="text-white" />
-//             </div>
-
-//             <CardTitle className="text-2xl font-bold">
-//               Forgot Password
-//             </CardTitle>
-
-//             <p className="text-sm text-muted-foreground">
-//               Enter your email to receive OTP
-//             </p>
-//           </CardHeader>
-
-//           <CardContent>
-//             <form onSubmit={handleSubmit} className="space-y-4">
-
-//               <Input
-//                 type="email"
-//                 placeholder="Enter your email"
-//                 value={email}
-//                 onChange={(e) => setEmail(e.target.value)}
-//                 required
-//               />
-
-//               <Button
-//                 type="submit"
-//                 disabled={loading}
-//                 className="w-full bg-pink-600 hover:bg-pink-700"
-//               >
-//                 {loading ? "Sending..." : "Send OTP"}
-//               </Button>
-
-//             </form>
-//           </CardContent>
-
-//         </Card>
-//       </motion.div>
-
-//     </motion.div>
-//   );
 
 return (
   <motion.div

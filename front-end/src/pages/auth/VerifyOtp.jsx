@@ -167,7 +167,7 @@ const VerifyOtp = () => {
 
     try {
       const res = await axios.post(
-        `http://localhost:8000/verifyOtp/${email}`,
+        `${import.meta.env.VITE_URL}/verifyOtp/${email}`,
         { otp }
       );
 

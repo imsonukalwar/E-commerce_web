@@ -41,7 +41,7 @@ const Login = () => {
         console.log(formData);
     try {
         setloading(true);
-        const res = await axios.post("http://localhost:8000/login", formData, {
+        const res = await axios.post(`${import.meta.env.VITE_URL}/login`, formData, {
         "content-type": "application/json",
         });
         if (res.data.success) {

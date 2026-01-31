@@ -92,7 +92,7 @@ const AdminProduct = () => {
     try {
       setloading(true)
       const res = await axios.put(
-        `http://localhost:8000/product/update/${edietProduct._id}`,
+        `${import.meta.env.VITE_URL}/product/update/${edietProduct._id}`,
         formData,
         {
           headers: {
@@ -121,7 +121,7 @@ const AdminProduct = () => {
         (product) => product._id !== productId,
       );
       const res = await axios.delete(
-        `http://localhost:8000/product/delete/${productId}`,
+        `${import.meta.env.VITE_URL}/product/delete/${productId}`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,

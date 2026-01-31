@@ -57,7 +57,7 @@ const UserInfo = () => {
       }
       setloading(true);
       const res = await axios.put(
-        `http://localhost:8000/update/${userId}`,
+        `${import.meta.env.VITE_URL}/update/${userId}`,
         formData,
         {
           headers: {
@@ -80,7 +80,7 @@ const UserInfo = () => {
 
   const getUserDetails = async () => {
     try {
-      const res = await axios.get(`http://localhost:8000/getUserById/${userId}`,
+      const res = await axios.get(`${import.meta.env.VITE_URL}/getUserById/${userId}`,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`

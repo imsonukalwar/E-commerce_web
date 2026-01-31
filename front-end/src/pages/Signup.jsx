@@ -38,7 +38,7 @@ const submithandler=async(e)=>{
         console.log(formData);
         try {
             setloading(true)
-            const res=await axios.post("http://localhost:8000/register",formData,{
+            const res=await axios.post(`${import.meta.env.VITE_URL}/register`,formData,{
                 "content-type":"application/json"
             })
             if(res.data.success){

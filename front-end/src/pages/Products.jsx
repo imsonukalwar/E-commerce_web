@@ -36,7 +36,7 @@ const Products = () => {
     try {
       setLoading(true);
       const res = await axios.get(
-        "http://localhost:8000/product/getAllproducts"
+        `${import.meta.env.VITE_URL}/product/getAllproducts`
       );
       if (res.data.success) {
         setAllProduct(res.data.products);
