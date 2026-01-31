@@ -20,7 +20,7 @@ const addProduct=async(req,res)=>{
         if(req.files&&req.files.length>0){
             for (let file of req.files) {
                 const fileUri=getDataUri(file);console.log("FILE:", file);
-                const result= await cloudinary.v2.uploader.upload(fileUri, {
+                const result= await cloudinary.uploader.upload(fileUri, {
                 folder: "mern_products",
                 
                 });console.log(result);
@@ -136,7 +136,7 @@ const updateProduct=async(req,res)=>{
                     !keepIds.includes(img.public_id)
             )
             for (const img of removedImages) {
-                await cloudnary.uploader.destroy(img.public_id)
+                await cloudinary.uploader.destroy(img.public_id)
             }
         }else{
             updatedImages=product.productImage//keep all if nothing send
@@ -145,7 +145,7 @@ const updateProduct=async(req,res)=>{
         if(req.files&& req.files.length>0){
             for (const file of req.files) {
                 const fileUri=getDataUri(file)
-                const result =await cloudnary.uploader.upload(fileUri,{folser:"mern_products"})
+                const result =await cloudinary.uploader.upload(fileUri,{folser:"mern_products"})
                 updatedImages.push({
                     url:result.secure_url,
                     public_id:result.public_id
@@ -158,7 +158,7 @@ const updateProduct=async(req,res)=>{
         product.productPrise=productPrise||product.productPrise
         product.category=category||product.category
         product.brand=brand||product.brand
-        product.productImage=productImage||product.productImage
+        product.productImage=updatedImages
         await product.save();
         return res.status(200).send({
                 success:true,

@@ -1,4 +1,4 @@
-
+const mongoose = require("mongoose");
 const User=require("../models/model.js")
 const bcrypt=require('bcrypt')
 const jwt=require('jsonwebtoken')
@@ -158,7 +158,7 @@ const login=async(req,res)=>{
             })
         }
 //generate token
-        const accessToken=await jwt.sign({id:exixstUser._id},process.env.KEY,{expiresIn:'20m'})
+        const accessToken=await jwt.sign({id:exixstUser._id},process.env.KEY,{expiresIn:'1h'})
         const refressToken=await jwt.sign({id:exixstUser._id},process.env.KEY,{expiresIn:'10d'})
         exixstUser.Islogin=true;
         await exixstUser.save();
@@ -338,7 +338,10 @@ const allUser=async(req,res)=>{
 const getUserById=async(req,res)=>{
     try {
         const {userId}=req.params;
-        const user=await User.findById(userId).select("-password -otp -token -otpexpiry ");
+        console.log(User.findById(userId));
+        
+        const user = await User.findById(userId).select("-password -otp -token -otpexpiry");
+        console.log(user);
         if(!user){
             return res.status(404).json({
             success:false,
@@ -347,7 +350,7 @@ const getUserById=async(req,res)=>{
         }
         return res.status(200).json({
             success:true,
-            user1,
+            user,
             })
     } catch (error) {
         return res.status(500).json({
@@ -359,6 +362,9 @@ const getUserById=async(req,res)=>{
 
 const updateUser = async (req, res) => {
 try {
+    // console.log("FILE =>", req.file);
+    console.log("CLOUDINARY =>", cloudinary);
+
     const userIdToUpdate = req.params.id;
     const  loggedInUser = req.user; // from auth middleware
 if (!loggedInUser) {
@@ -400,26 +406,55 @@ if (!loggedInUser) {
     let profilePicPublicId = user.profilePicPublicId;
 
     //  If new image uploaded
-    if (req.file) {
-        if (profilePicPublicId) {
-        await cloudinary.uploader.destroy(profilePicPublicId);
-        }
+//     if (req.file) {
+//         console.log("INSIDE FILE BLOCK");
+//         if (profilePicPublicId) {
+//         await cloudinary.uploader.destroy(profilePicPublicId);
+//         }
 
-        const uploadResult = await new Promise((resolve, reject) => {
-        const stream = cloudinary.uploader.upload_stream(
-            { folder: "profiles" },
-            (error, result) => {
-            if (error) reject(error);
-            else resolve(result);
-            }
-            );
-        stream.end(req.file.buffer);
-        });
+//         const uploadResult = await new Promise((resolve, reject) => {
+//         const stream = cloudinary.uploader.upload_stream(
+//             { folder: "profiles" },
+//             (error, result) => {
+//             if (error) reject(error);
+//             else resolve(result);
+//             }
+//             );
+//         stream.end(req.file.buffer);
+//         });
+// console.log("UPLOAD RESULT =>", uploadResult);
 
-        profilePicUrl = uploadResult.secure_url;
-        profilePicPublicId = uploadResult.public_id;
-    }
 
+//         profilePicUrl = uploadResult.secure_url;
+//         profilePicPublicId = uploadResult.public_id;
+//     }
+
+if (req.file) {
+  console.log("INSIDE FILE BLOCK");
+
+  if (profilePicPublicId) {
+    await cloudinary.uploader.destroy(profilePicPublicId);
+  }
+
+  const uploadResult = await new Promise((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream(
+      { folder: "profiles" },
+      (error, result) => {
+        if (error) reject(error);
+        else resolve(result);
+      }
+    );
+    stream.end(req.file.buffer);
+  });
+
+  console.log("UPLOAD RESULT =>", uploadResult);
+
+  profilePicUrl = uploadResult.secure_url;
+  profilePicPublicId = uploadResult.public_id;
+}
+
+
+    
     //  Update fields
     user.firstName = firstName || user.firstName;
     user.lastName = lastName || user.lastName;
@@ -429,7 +464,7 @@ if (!loggedInUser) {
     user.phoneNo = phoneNo || user.phoneNo;
     user.profilePic = profilePicUrl;
     user.profilePicPublicId = profilePicPublicId;
-    user.role=role;
+    user.role=role|| user.role;
 
     //  Role update only admin can do
     // if (loggedUser.role === "admin" && req.body.role) {

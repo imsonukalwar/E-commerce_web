@@ -27,7 +27,9 @@ const getCart=async(req,res)=>{
 
 const addToCart=async(req,res)=>{
     try {
-        const userId=req.id;
+        const userId=req.user?._id;//req.id
+        // console.log("...>>",userId);
+        // console.log("...UUU>>",req.user);
         const {productId}=req.body;
         //check if product is exist 
         const product =await Product.findById(productId);
