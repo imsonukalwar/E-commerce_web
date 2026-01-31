@@ -1,64 +1,49 @@
-// import { Button } from './ui/button'
-
-// const Hero = () => {
-// return (
-//     <section className='bg-gradient-to-r from-blue-600 to-purple-600 text-white py-16'>\
-//     <div className='max-w-7xl mx-auto px-4'>
-//         <div className='grid md:grid-cols-2 gap-8 items-center'>
-//             <div>
-//                 <h1 className='text-4xl md:text-6xl font-bold mb-4'>latest Electronics at Best Prise</h1>
-//                 <p className='text-4xl mb-6 text-blue-100'>Dsicover Cutting-Edge technology with 
-//                     unbeatebals deals on smartphon and mobile ,laptop and more</p>
-//                     <div className='flex flex-col sm:flex-row gap-4'>
-//                         <Button variant='outline' className='border-white text-white hover:bg-white hover:text-blue-600
-//                         bg-transparent'>Shoap Now</Button>
-//                         <Button variant='outline' className='border-white text-white hover:bg-white hover:text-blue-600
-//                         bg-transparent'>View Details</Button>
-//                     </div>
-//             </div>
-//             <div className='relative '>
-//                         <img src='hero.png' alt='' width={500} height={400} className='rounded-1g shadow-2xl'/>
-//                     </div>
-//         </div>
-//     </div>
-//     </section>
-// )
-// }
-
-// export default Hero
 
 
-
-
-
-
+import { useNavigate } from "react-router-dom";
 import { Button } from "./ui/button";
 
+
+
 const Hero = () => {
+  const navigate = useNavigate();
+
   return (
-    <section className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white py-20">
-      <div className="max-w-7xl mx-auto px-4">
-        <div className="grid md:grid-cols-2 gap-10 items-center">
+    <section className="relative overflow-hidden bg-gradient-to-br from-indigo-700 via-purple-700 to-pink-600 text-white py-20 sm:py-24">
+
+      {/* BACKGROUND BLURS */}
+      <div className="absolute -top-24 -left-24 w-96 h-96 bg-pink-500/30 rounded-full blur-3xl"></div>
+      <div className="absolute top-40 -right-24 w-96 h-96 bg-indigo-500/30 rounded-full blur-3xl"></div>
+
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="grid md:grid-cols-2 gap-12 items-center">
 
           {/* LEFT CONTENT */}
-          <div>
-            <h1 className="text-4xl md:text-6xl font-extrabold leading-tight mb-6">
-              Latest Electronics at <br /> Best Price
+          <div className="text-center md:text-left">
+
+            <h1 className="text-3xl sm:text-4xl md:text-6xl font-black leading-tight mb-6">
+              Latest Electronics at <br />
+              <span className="bg-gradient-to-r from-yellow-300 to-pink-300 bg-clip-text text-transparent">
+                Best Price
+              </span>
             </h1>
 
-            <p className="text-lg md:text-xl mb-8 text-white/80">
+            <p className="text-base sm:text-lg md:text-xl mb-8 text-white/80">
               Discover cutting-edge technology with unbeatable deals on
               smartphones, laptops and more.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+
               <Button
+                onClick={() => navigate("/products")}
                 variant="outline"
                 className="
-                  border-white text-white bg-transparent
-                  hover:bg-white hover:text-purple-600
+                  border-white text-white bg-white/10 backdrop-blur-md
+                  hover:bg-white hover:text-purple-700
                   transition-all duration-300
-                  px-6 py-3 rounded-xl
+                  px-8 py-3 rounded-2xl
+                  hover:scale-105 shadow-lg
                 "
               >
                 Shop Now
@@ -67,30 +52,35 @@ const Hero = () => {
               <Button
                 variant="outline"
                 className="
-                  border-white text-white bg-transparent
-                  hover:bg-white hover:text-purple-600
+                  border-white text-white bg-white/10 backdrop-blur-md
+                  hover:bg-white hover:text-purple-700
                   transition-all duration-300
-                  px-6 py-3 rounded-xl
+                  px-8 py-3 rounded-2xl
+                  hover:scale-105 shadow-lg
                 "
               >
                 View Details
               </Button>
+
             </div>
           </div>
 
           {/* RIGHT IMAGE */}
           <div className="flex justify-center md:justify-end">
+
             <img
               src="banner1.png"
               alt="hero"
-              width={500}
-              height={400}
               className="
-                rounded-xl shadow-2xl
-                transition-transform duration-500
-                hover:scale-105
+                w-[260px]
+                sm:w-[340px]
+                md:w-[450px]
+                rounded-2xl shadow-2xl
+                transition-transform duration-700
+                hover:scale-110
               "
             />
+
           </div>
 
         </div>
@@ -98,6 +88,9 @@ const Hero = () => {
     </section>
   );
 };
+
+
+
 
 export default Hero;
 

@@ -1,190 +1,141 @@
-// import axios from 'axios'
-// import { ShoppingCart } from 'lucide-react'
-// import { useDispatch, useSelector } from 'react-redux'
-// import { Link, useNavigate } from 'react-router-dom'
-// import { toast } from 'sonner'
-// import { Button } from './ui/button'
-
-
-
-// import { setuser } from '@/redux/userSlice'
 
 
 
 
-// const Navbar = () => {
-// const {user} = useSelector( store=>store.user);
-//     const AccessToken=localStorage.getItem('AccessToken')
-//     const dispatch=useDispatch()
-//  const nevigate=useNavigate()
-//     const logouthandler=async()=>{
-//         try {
-//             const res= await axios.post('http://localhost:8000/logout',{},
-//                 {headers:{
-//                     Authorization:`Bearer ${AccessToken}`
-//                 }
-//             })
-//             if(res.data.success){
-//                 dispatch(setuser(null))
-//                 toast.success(res.data.message);
-                
-                
-//             }
-//         } catch (error) {
-//             console.log(error);
-            
-//         }
-//     }
-// return (
-//     <header className='bg-pink-200 fixex w-full z-20 border-gray-700'>
-//     <div className='max-w-7xl max-auto flex justify-between items-center py-3'>
-//         {/* logo section */}
-//         <div>
-//             <img src='https://simpleicons.org/icons/shopify.svg'alt='' className='w-[100px] h-12'/>
-//         </div>
-//         {/* navbar section */}
-//         <nav className='flex gap-10 justify-between items-center'>
-//             <ul className='flex gap-7 items-center text-xl font-semibold'>
-//                 <Link to={'/'}><li>Home</li></Link>
-//                 <Link to={'/product'}><li>Product</li></Link>
-//                 {
-//                     user && <Link to={'/profile'}><li>Hello,{user.firstName}</li></Link>
-//                 }
-//             </ul>
-//             <Link to={'/cart'} className='relative'>
-//             <ShoppingCart/>
-//             <span className='bg-pink-400 rounded-full absolute trxt-white -top-3 -right-5 px-2'>0</span>
-//             </Link>
-//             {user?<Button onClick={logouthandler} className='bg-pink-700 text-white cursor-pointer'>Logout
-//             </Button>:<Button onClick={()=>nevigate('/login')} className='bg-gradient-to-tl from-blue-600 to-purple-600
-//             text-white cursor-pointer
-//             transition-all duration-500 ease-in-out
-//             hover:from-purple-600 hover:to-blue-600
-//             hover:scale-[1.08]
-//             hover:shadow-xl hover:shadow-purple-500/40
-//             active:scale-[0.98]'>Login</Button>}
-//         </nav>
-//     </div>
-//     </header>
-// )
-// }
-
-// export default Navbar
-
-
-
-
-
-
-
-
-
-import axios from "axios";
-import { ShoppingCart } from "lucide-react";
-import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { toast } from "sonner";
-import { Button } from "./ui/button";
+import { ShoppingCart, Menu, X } from "lucide-react";
+import { useDispatch, useSelector } from "react-redux";
+import { Button } from "@/components/ui/button";
 import { setUser } from "@/redux/userSlice";
-
-
+import toast from "react-hot-toast";
 
 const Navbar = () => {
-const { user } = useSelector((state) => state.user);
-const {cart}=useSelector((state) => state.product);
-// console.log("😄",cart);
 
-const dispatch = useDispatch();
-const navigate = useNavigate();
-const accessToken = localStorage.getItem("accessToken");
+  const { user } = useSelector((state) => state.user);
+  const { cart } = useSelector((state) => state.product);
 
-const admin=user?.role==="admin"?true:false
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-const logouthandler = async () => {
-    try {
-        const res = await axios.post("http://localhost:8000/logout",{},{headers:{
-        Authorization: `Bearer ${accessToken}`,},});
-        if (res.data.success) {
-        dispatch(setUser(null));
-        toast.success(res.data.message);}
+  const [open, setOpen] = useState(false);
 
-        // localStorage.removeItem("accessToken");
-        // dispatch(setUser(null));
-        // toast.success("Logout successful");
-        // navigate("/login");
+  const admin = user?.role === "admin";
 
+  const logoutHandler = () => {
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("user");
+    dispatch(setUser(null));
+    toast.success("Logout successful");
+    navigate("/login");
+  };
 
-        } catch (error) {
-        console.log(error);}};
-        
+  return (
+    <header className="fixed top-0 w-full z-50 bg-white border-b shadow-sm">
 
-
-    return (
-    <header className="bg-white/80 backdrop-blur-md fixed w-full z-20 border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+      <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
 
         {/* LOGO */}
-        <div className="flex items-center gap-2">
-            <img
+        <Link to="/" className="flex items-center gap-2">
+          <img
             src="https://simpleicons.org/icons/shopify.svg"
-            alt="logo"
-            className="w-10 h-10"
-            />
-            <span className="text-xl font-bold text-gray-800">
+            className="w-8 h-8"
+          />
+          <span className="text-xl font-bold text-purple-600">
             Shopify
+          </span>
+        </Link>
+
+        {/* DESKTOP MENU */}
+        <nav className="hidden md:flex items-center gap-8 text-gray-700 font-medium">
+
+          <Link to="/">Home</Link>
+          <Link to="/products">Products</Link>
+
+          {user && (
+            <Link to={`/profile/${user._id}`}>
+              Hello, {user.firstName}
+            </Link>
+          )}
+
+          {admin && (
+            <Link to="/dashboard/sales">
+              Dashboard
+            </Link>
+          )}
+
+          <Link to="/cart" className="relative">
+            <ShoppingCart />
+            <span className="absolute -top-2 -right-3 bg-pink-500 text-white text-xs px-2 rounded-full">
+              {cart?.items?.length || 0}
             </span>
+          </Link>
+
+          {user ? (
+            <Button onClick={logoutHandler}>Logout</Button>
+          ) : (
+            <Button onClick={() => navigate("/login")}>Login</Button>
+          )}
+
+        </nav>
+
+        {/* MOBILE ICON */}
+        <div className="md:hidden">
+          {open ? (
+            <X size={26} onClick={() => setOpen(false)} />
+          ) : (
+            <Menu size={26} onClick={() => setOpen(true)} />
+          )}
         </div>
 
-        {/* NAV LINKS */}
-        <nav className="flex items-center gap-8 text-gray-800 font-semibold">
+      </div>
 
-            <ul className="flex gap-7 items-center text-lg">
-            <Link to="/" className="hover:text-purple-600 transition">
-                <li>Home</li>
-            </Link>
+      {/* MOBILE MENU */}
+      {open && (
+        <div className="md:hidden bg-white border-t shadow-md">
 
-            <Link to="/products" className="hover:text-purple-600 transition">
-                <li>Product</li>
-            </Link>
+          <div className="flex flex-col gap-4 p-5 text-gray-700">
+
+            <Link to="/" onClick={() => setOpen(false)}>Home</Link>
+            <Link to="/products" onClick={() => setOpen(false)}>Products</Link>
 
             {user && (
-                <Link to={`/profile/${user._id}`} className="hover:text-purple-600 transition">
-                <li>Hello, {user.firstName}</li>
-                </Link>
+              <Link
+                to={`/profile/${user._id}`}
+                onClick={() => setOpen(false)}
+              >
+                Hello, {user.firstName}
+              </Link>
             )}
 
             {admin && (
-                <Link to={`/dashboard/sales`} className="hover:text-purple-600 transition">
-                <li >Dashboard</li>
-                </Link>
+              <Link
+                to="/dashboard/sales"
+                onClick={() => setOpen(false)}
+              >
+                Dashboard
+              </Link>
             )}
 
-            </ul>
-
-          {/* CART */}
-            <Link to="/cart" className="relative hover:text-purple-600 transition">
-            <ShoppingCart size={22} />
-            <span className="absolute -top-3 -right-4 bg-pink-500 text-white text-xs px-2 py-0.5 rounded-full">
-            {cart?.items?.length || 0}
-            </span>
+            <Link to="/cart" onClick={() => setOpen(false)}>
+              Cart ({cart?.items?.length || 0})
             </Link>
 
-            {user ? (<Button onClick={logouthandler}className="bg-pink-600 hover:bg-pink-600 text-white transition cursor-pointer">
-            Logout
-            </Button>) : 
-            (<Button onClick={() => navigate("/login")}
-            className="
-                bg-gradient-to-tl from-blue-600 to-purple-600 text-white transition-all duration-500 
-                ease-in-out hover:from-purple-600 hover:to-blue-600 hover:scale-[1.08] hover:shadow-xl 
-                hover:shadow-purple-500/40 active:scale-[0.98]"
-            >
-            Login
-            </Button>
+            {user ? (
+              <Button onClick={logoutHandler}>Logout</Button>
+            ) : (
+              <Button onClick={() => navigate("/login")}>Login</Button>
             )}
-        </nav>
-    </div>
+
+          </div>
+
+        </div>
+      )}
+
     </header>
-);
+  );
 };
 
 export default Navbar;
+
+

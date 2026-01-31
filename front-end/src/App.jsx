@@ -21,6 +21,11 @@ import Signup from './pages/Signup'
 import SingleProduct from './pages/SingleProduct'
 import Verify from './pages/Verify'
 import VerifyEmail from './pages/VerifyEmail'
+import AddressForm from './pages/AddressForm'
+import OrderSuccess from './pages/OrderSuccess'
+import ForgotPassword from './pages/auth/ForgotPassword'
+import VerifyOtp from './pages/auth/VerifyOtp'
+import ChangePassword from './pages/auth/ChangePassword'
 
 const router=createBrowserRouter([
   {
@@ -83,6 +88,40 @@ const router=createBrowserRouter([
     <Cart/>
     </>
   },
+  {
+    path:'/address',
+    element:<>
+    <ProtectedRoute>
+      <AddressForm/>
+    </ProtectedRoute>
+    </>
+  },{
+    path:'/order-success',
+    element:<>
+    <ProtectedRoute>
+      <OrderSuccess/>
+    </ProtectedRoute>
+    </>
+  },
+  {
+    path:'/forgot-password',
+    element:<>
+    <ForgotPassword/>
+    </>
+  },
+  {
+    path:"/verify-otp/:email",
+    element:<>
+    <VerifyOtp/>
+    </>
+  },
+  {
+    path:"/change-password/:email",
+    element:<>
+    <ChangePassword/>
+    </>
+  },
+
   {
     path:'/dashboard',
     element:<ProtectedRoute adminOnly={true}><Navbar/><DashBoard/></ProtectedRoute>,

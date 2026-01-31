@@ -18,6 +18,7 @@ import { toast } from "sonner";
 import { useDispatch } from "react-redux";
 import { setUser } from "@/redux/userSlice";
 
+
 const Login = () => {
     const [showpas, setshaowpas] = useState(false);
     const [loading, setloading] = useState(false);
@@ -132,6 +133,15 @@ const Login = () => {
                 />
                 )}
             </div>
+            {/* ///////////////////////////// */}
+            <div className="text-right mt-2">
+                <Link
+                to="/forgot-password"
+                className="text-blue-600 hover:underline text-sm">
+                Forgot Password?
+                </Link>
+                </div>
+            {/* ////////////////////////////// */}
             </div>
             </div>
         </CardContent>

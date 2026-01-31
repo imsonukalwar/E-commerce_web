@@ -18,171 +18,263 @@ import { toast } from "sonner";
 import axios from "axios";
 import { setUser } from "@/redux/userSlice";
 import { Loader2 } from "lucide-react";
+import MyOrder from "./MyOrder";
+
+
+
+import {  Camera } from "lucide-react";
 
 
 
 const Profile = () => {
-    const { user } = useSelector((state) => state.user)
-    const [loading,setloading]=useState(false);
-    const params=useParams()
-    const userId=params.userId
-    const[updateUser,setUpdateUser]=useState({
-        firstName:user?.firstName,
-        lastName:user?.lastName,
-        email:user?.email,
-        phoneNo:user?.phoneNo,
-        address:user?.address,
-        city:user?.city,
-        zipCode:user?.zipCode,
-        profilePic:user?.profilePic,
-        role:user?.role,
-    })
 
-    
-    const [file,setFile]=useState(null)
-    const Dispatch=useDispatch()
-    const handleChange=(e)=>{
-        setUpdateUser({...updateUser,[e.target.name]:e.target.value})
-    }
-    const handleFileChange=(e)=>{
-        const selectedFile = e.target.files[0];
-        setFile(selectedFile)
-        setUpdateUser({...updateUser,profilePic: URL.createObjectURL(selectedFile)})
-    }
-    const handleSubmit=async(e)=>{
-        e.preventDefault()
-        const accessToken=localStorage.getItem("accessToken")
-        try {
-            const formData=new FormData()
-            formData.append("firstName",updateUser.firstName)
-            formData.append("lastName",updateUser.lastName)
-            formData.append("email",updateUser.email)
-            formData.append("phoneNo",updateUser.phoneNo)
-            formData.append("address",updateUser.address)
-            formData.append("city",updateUser.city)
-            formData.append("zipCode",updateUser.zipCode)
-            // formData.append("role",updateUser.role)
-            if(file){
-                formData.append("file",file)//image file for backend multer
-            }
-            setloading(true)
-            const res=await axios.put(`http://localhost:8000/update/${userId}`,formData,{
-                headers:{
-                    Authorization:`Bearer ${accessToken}`,
-                    // "content-type":"multipart/form-data"
-                }
-            })
-            if(res.data.success){
-                toast.success(res.data.message)
-                Dispatch(setUser(res.data.user))
-                localStorage.setItem("user", JSON.stringify(res.data.user));
+  const { user } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+  const params = useParams();
+  const userId = params.userId;
 
-            }
-        } catch (error) {
-            console.log(error);
-            toast.error("Field to update Profile")
-            
-        }finally{setloading(false)}
+  const [loading, setLoading] = useState(false);
+  const [file, setFile] = useState(null);
+
+  const [updateUser, setUpdateUser] = useState({
+    firstName: user?.firstName,
+    lastName: user?.lastName,
+    email: user?.email,
+    phoneNo: user?.phoneNo,
+    address: user?.address,
+    city: user?.city,
+    zipCode: user?.zipCode,
+    profilePic: user?.profilePic,
+  });
+
+  const handleChange = (e) => {
+    setUpdateUser({ ...updateUser, [e.target.name]: e.target.value });
+  };
+
+  const handleFileChange = (e) => {
+    const selected = e.target.files[0];
+    setFile(selected);
+    setUpdateUser({
+      ...updateUser,
+      profilePic: URL.createObjectURL(selected),
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const accessToken = localStorage.getItem("accessToken");
+
+    try {
+      const formData = new FormData();
+      Object.keys(updateUser).forEach((key) => {
+        if (key !== "profilePic") {
+          formData.append(key, updateUser[key]);
+        }
+      });
+      if (file) formData.append("file", file);
+
+      setLoading(true);
+
+      const res = await axios.put(
+        `http://localhost:8000/update/${userId}`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+
+      if (res.data.success) {
+        toast.success(res.data.message);
+        dispatch(setUser(res.data.user));
+        localStorage.setItem("user", JSON.stringify(res.data.user));
+      }
+    } catch (err) {
+      toast.error("Failed to update profile");
+    } finally {
+      setLoading(false);
     }
-return (
-    <div className="pt-20 min-h-screen bg-gray-300">
-    <Tabs defaultValue="profile" className="max-w-7xl items-center">
-        <TabsList>
-        <TabsTrigger value="profile">Profile</TabsTrigger>
-        <TabsTrigger value="orders">Orders</TabsTrigger>
+  };
+
+  return (
+    <div className="min-h-screen pt-24 bg-gradient-to-br from-slate-100 via-blue-100 to-purple-100">
+
+      <Tabs defaultValue="profile" className="max-w-5xl mx-auto px-4">
+
+        {/* TABS */}
+        <TabsList className="
+          bg-white/80 backdrop-blur-lg
+          rounded-full shadow-xl
+          p-2 flex justify-center gap-3
+        ">
+          <TabsTrigger value="profile" className="rounded-full px-6 text-sm sm:text-base">
+            Profile
+          </TabsTrigger>
+          <TabsTrigger value="orders" className="rounded-full px-6 text-sm sm:text-base">
+            Orders
+          </TabsTrigger>
         </TabsList>
+
+        {/* ================= PROFILE ================= */}
         <TabsContent value="profile">
-        <div>
-            <div className="flex flex-col justify-center items-center bg-gray-100">
-            <h1 className="font-bold mb-7 text-2xl text-gray-900">Update Profile</h1>
-            <div className="w-full flex gap-10 justify-between items-start px-7 max-w-2xl">
-                {/* profile picture */}
-                <div className="flex flex-col items-center">
+
+          <div className="
+            mt-10
+            bg-white/80 backdrop-blur-xl
+            rounded-3xl
+            shadow-2xl
+            p-5 sm:p-8 md:p-12
+          ">
+
+            <h1 className="
+              text-2xl sm:text-3xl font-extrabold
+              text-center mb-12
+              bg-gradient-to-r from-pink-600 to-purple-600
+              bg-clip-text text-transparent
+            ">
+              Update Your Profile
+            </h1>
+
+            <div className="
+              flex flex-col md:flex-row
+              gap-10 md:gap-16
+              items-center md:items-start
+            ">
+
+              {/* AVATAR */}
+              <div className="relative group">
+
                 <img
-                    src={updateUser?.profilePic||userLogo}
-                    alt="profile"
-                    className="w-32 h-32 mx-auto rounded-full object-cover border-4 border-pink-800"/>
-                <Label className='mt-4 cursor-pointer bg-pink-700 text-white px-4 py-2 rounded hover:bg-pink-700 '> Cange Picture
-                    <input onChange={handleFileChange} type='file' name="file" accept='image/*' className="hidden "/>
+                  src={updateUser.profilePic || user?.profilePic || userLogo}
+                  className="
+                    w-32 h-32 sm:w-36 sm:h-36
+                    rounded-full object-cover
+                    border-4 border-pink-500
+                    shadow-xl
+                    transition-transform duration-300
+                    group-hover:scale-105
+                  "
+                />
+
+                <Label className="
+                  absolute -bottom-3 left-1/2 -translate-x-1/2
+                  flex items-center gap-2
+                  bg-gradient-to-r from-pink-600 to-purple-600
+                  text-white px-4 py-1.5 rounded-full
+                  text-xs cursor-pointer
+                  shadow-lg
+                ">
+                  <Camera size={14} />
+                  Change
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileChange}
+                    className="hidden"
+                  />
                 </Label>
+
+              </div>
+
+              {/* FORM */}
+              <form
+                onSubmit={handleSubmit}
+                className="
+                  flex-1
+                  grid grid-cols-1 md:grid-cols-2
+                  gap-4 md:gap-6
+                "
+              >
+
+                {[
+                  { label: "First Name", name: "firstName" },
+                  { label: "Last Name", name: "lastName" },
+                  { label: "Phone", name: "phoneNo" },
+                  { label: "City", name: "city" },
+                  { label: "Zip Code", name: "zipCode" },
+                ].map((field) => (
+                  <div key={field.name}>
+                    <Label>{field.label}</Label>
+                    <Input
+                      className="
+                        w-full
+                        focus:ring-2 focus:ring-pink-400
+                      "
+                      name={field.name}
+                      value={updateUser[field.name]}
+                      onChange={handleChange}
+                    />
+                  </div>
+                ))}
+
+                <div className="md:col-span-2">
+                  <Label>Email</Label>
+                  <Input
+                    className="w-full bg-gray-100"
+                    value={updateUser.email}
+                    disabled
+                  />
                 </div>
-                {/* profile form */}
-                    <form onSubmit={handleSubmit} className="space-y-4 shadow-1g p-5 rounded-1g bg-white">
-                        <div className="grid grid-cols-2 gap-4">
-                            <div>
-                        <Label className='block text-sm font-medium'>First Name</Label>
-                        <input type="text" value={updateUser.firstName} onChange={handleChange} name="firstName" placeholder="John" className="w-full border rounded-1g px-3 py-3 mt-1 bg-pink-100"/>
-                            </div>
-                        <div>
-                        <Label className='block text-sm font-medium'>First Name</Label>
-                        <input type="text" value={updateUser.lastName} onChange={handleChange}  name="lastName" placeholder="Deo" className="w-full border rounded-1g px-3 py-3 mt-1 bg-pink-100"/>
-                            </div>
-                        </div>
-                        <div>
-                        <Label className='block text-sm font-medium'>Email</Label>
-                        <input type="email" value={updateUser.email} onChange={handleChange}  name="email" disabled placeholder="Enter your Email" className="w-full border rounded-1g px-3 py-3 mt-1 bg-pink-100 cursor-not-allowed"/>
-                        </div>
-                        <div>
-                        <Label className='block text-sm font-medium'>Phone Number</Label>
-                        <input type="text" value={updateUser.phoneNo} onChange={handleChange}  name="phoneNo" placeholder="Enter your contact number" 
-                        className="w-full border rounded-1g px-3 py-3 mt-1 bg-pink-100 cursor-pointer"/>
-                        </div>
-                        <div>
-                        <Label className='block text-sm font-medium'>Address</Label>
-                        <input type="text" value={updateUser.address} onChange={handleChange}  name="address" placeholder="Enter your Address" 
-                        className="w-full border rounded-1g px-3 py-3 mt-1 bg-pink-100 cursor-pointer"/>
-                        </div>
-                        <div className="grid grid-cols-2 gap-4">
-                            <div>
-                        <Label className='block text-sm font-medium'>City</Label>
-                        <input type="text" value={updateUser.city} onChange={handleChange}  name="city" placeholder="Enter your City" 
-                        className="w-full border rounded-1g px-3 py-3 mt-1 bg-pink-100 cursor-pointer"/>
-                        </div>
-                        <div>
-                        <Label className='block text-sm font-medium'>Zip Code</Label>
-                        <input type="text" value={updateUser.zipCode} onChange={handleChange}  name="zipCode" placeholder="Enter your ZipCode" 
-                        className="w-full border rounded-1g px-3 py-3 mt-1 bg-pink-100 cursor-pointer"/>
-                        </div>
-                        </div>
-                        <Button type="submit" className='hover:bg-pink-700 w-full mt-4 bg-pink-600 text-white font-semibold py-2 rounded-1g cursor-pointer'>
-                            {loading ? (
-                            <>
-                            <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                            Please wait</>) : ("Login")}
-                            (Apdate Profile)
-                            </Button>
-                    </form>
+
+                <div className="md:col-span-2">
+                  <Label>Address</Label>
+                  <Input
+                    className="w-full"
+                    name="address"
+                    value={updateUser.address}
+                    onChange={handleChange}
+                  />
                 </div>
+
+                <div className="md:col-span-2 pt-6">
+
+                  <Button
+                    type="submit"
+                    className="
+                      w-full py-3
+                      text-base sm:text-lg
+                      bg-gradient-to-r from-pink-600 to-purple-600
+                      rounded-xl text-white
+                      hover:scale-[1.03]
+                      transition-all
+                    "
+                  >
+                    {loading ? (
+                      <span className="flex items-center justify-center gap-2">
+                        <Loader2 className="animate-spin" />
+                        Updating...
+                      </span>
+                    ) : (
+                      "Save Changes"
+                    )}
+                  </Button>
+
+                </div>
+
+              </form>
+
             </div>
-        </div>
+          </div>
+
         </TabsContent>
+
+        {/* ================= ORDERS ================= */}
         <TabsContent value="orders">
-        <Card>
-            <CardHeader>
-            <CardTitle>Password</CardTitle>
-            <CardDescription>
-                Change your password here. After saving, you&apos;ll be logged
-                out.
-            </CardDescription>
-            </CardHeader>
-            <CardContent className="grid gap-6">
-            <div className="grid gap-3">
-                <Label htmlFor="tabs-demo-current">Current password</Label>
-                <Input id="tabs-demo-current" type="password" />
-            </div>
-            <div className="grid gap-3">
-                <Label htmlFor="tabs-demo-new">New password</Label>
-                <Input id="tabs-demo-new" type="password" />
-            </div>
-            </CardContent>
-            <CardFooter>
-            <Button>Save password</Button>
-            </CardFooter>
-        </Card>
+          <MyOrder />
         </TabsContent>
-    </Tabs>
+
+      </Tabs>
     </div>
-);
+  );
 };
+
+
+
+
+
+
+
+
 
 export default Profile;
