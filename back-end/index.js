@@ -31,6 +31,6 @@ app.listen(port,(req,res)=>{
     console.log(`you are listem at port :${port}`);
 })
 })
-.catch((eeror)=>{
+.catch((error)=>{
     throw new Error(error.message)
 })
