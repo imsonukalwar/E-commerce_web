@@ -15,6 +15,10 @@ const cartRouter = require('./router/cartRoute.js');
 const route = require('./router/orderRoute.js');
 app.use(express.urlencoded({ extended: true }));
 
+
+app.get("/sonu",(req,res)=>{
+    res.send("hello sonu")
+})
 //user route
 app.use("/",router)
 //product
@@ -23,6 +27,7 @@ app.use("/product",productRoute)
 app.use("/cart",cartRouter)
 //payment order
 app.use("/orders",route)
+
 
 db()
 .then(()=>{
