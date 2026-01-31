@@ -1,19 +1,17 @@
-import {  configureStore } from "@reduxjs/toolkit";
-import { combineReducers } from "@reduxjs/toolkit";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
+import ProductSlice from "./ProductSlice.js";
 import userSlice from "./userSlice.js";
-import ProductSlice from "./productSlice.jsx"
 
 import {
-
-  persistReducer,
-  FLUSH,
-  REHYDRATE,
-  PAUSE,
-  PERSIST,
-  PURGE,
-  REGISTER,
-} from 'redux-persist'
-import storage from 'redux-persist/lib/storage'
+    FLUSH,
+    PAUSE,
+    PERSIST,
+    persistReducer,
+    PURGE,
+    REGISTER,
+    REHYDRATE,
+} from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
 
 
 

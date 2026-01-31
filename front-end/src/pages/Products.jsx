@@ -1,6 +1,6 @@
 
 import FilterSidebar from "@/components/FilterSidebar";
-import React, { useEffect, useState } from "react";
+import ProductCard from "@/components/ProductCard";
 import {
   Select,
   SelectContent,
@@ -8,11 +8,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import ProductCard from "@/components/ProductCard";
+import { setProducts } from "@/redux/ProductSlice";
 import axios from "axios";
-import { toast } from "sonner";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setProducts } from "@/redux/productSlice";
+import { toast } from "sonner";
 
 
 
