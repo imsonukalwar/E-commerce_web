@@ -12,6 +12,7 @@ const cloudinary=require('../Utils/cloudnary.js')
 const register=async(req,res)=>{
     try {
         const { firstName, lastName, email, password } = req.body;
+console.log(req.body);
 
 if (!firstName || !lastName || !email || !password) {
 return res.status(400).json({
@@ -36,7 +37,7 @@ return res.status(400).json({
             password:hashpassword});
 
         const token= await jwt.sign({id:newUser._id},process.env.KEY,{expiresIn:'10m'});
-        verifyemail(token,email);//we are sending email here
+        await verifyemail(token,email);//we are sending email here
         newUser.token=token //we are save token in db (check in model)
 
         await newUser.save();

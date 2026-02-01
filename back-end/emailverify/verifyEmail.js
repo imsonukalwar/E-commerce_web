@@ -5,7 +5,10 @@ require('dotenv').config();
 
 
 const verifyemail=async(token,email)=>{
+        console.log("kam to kar raha hau");
 const transporter=nodemailer.createTransport({
+
+    
     // service:'email',
     host: "smtp.gmail.com",
     port: 587,
@@ -25,7 +28,7 @@ const mailConfiguration={
     http://localhost:5173/verify/${token}
     thanks `
 }
-transporter.sendMail(mailConfiguration,function(error,info){
+await transporter.sendMail(mailConfiguration,function(error,info){
     if(error){
         throw new Error(error);
     }
