@@ -16,7 +16,10 @@ const transporter=nodemailer.createTransport({
     auth:{
         user:process.env.MAIL_USER,
         pass:process.env.MAIL_PAS
-    }
+    },
+  tls: {
+    rejectUnauthorized: false
+  }
 })
 const mailConfiguration={
     from:process.env.MAIL_USER,
@@ -25,7 +28,7 @@ const mailConfiguration={
     text:`Hi ! There,  You have recently visited 
     our website and entiredyour email.please follow 
     the given link to verify your email
-    http://localhost:5173/verify/${token}
+    ${process.env.CLIENT_URL}/verify/${token}
     thanks `
 }
 await transporter.sendMail(mailConfiguration,function(error,info){

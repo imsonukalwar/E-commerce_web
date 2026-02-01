@@ -16,6 +16,12 @@ const route = require('./router/orderRoute.js');
 app.use(express.urlencoded({ extended: true }));
 
 
+app.get("/smtp-check", async (req,res)=>{////
+  await transporter.verify();
+  res.send("SMTP OK");
+});////now
+
+
 app.get("/sonu",(req,res)=>{
     res.send("hello sonu")
 })
