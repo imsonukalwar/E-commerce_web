@@ -33,7 +33,7 @@ return res.status(400).json({
             password:hashpassword});
 
         const token= await jwt.sign({id:newUser._id},process.env.KEY,{expiresIn:'10m'});
-        await verifyemail(token,email);//we are sending email here
+        verifyemail(token,email);//we are sending email here
         newUser.token=token //we are save token in db (check in model)
         await newUser.save();
         res.status(201).json({
