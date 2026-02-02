@@ -11,8 +11,9 @@ const transporter=nodemailer.createTransport({
     
     // service:'email',
     host: "smtp.gmail.com",
-    port: 587,
-    secure: false,
+    // port: 587,
+    port: 465,
+    secure: true,
     auth:{
         user:process.env.MAIL_USER,
         pass:process.env.MAIL_PASS,
@@ -31,13 +32,15 @@ const mailConfiguration={
     ${process.env.CLIENT_URL}/verify/${token}
     thanks `
 }
-await transporter.sendMail(mailConfiguration,function(error,info){
-    if(error){
-        throw new Error(error);
-    }
-    console.log("email send sucsessfully !");
-    console.log(info);
-})
+// await transporter.sendMail(mailConfiguration,function(error,info){
+//     if(error){
+//         throw new Error(error);
+//     }
+//     console.log("email send sucsessfully !");
+//     console.log(info);
+// })
+const info = await transporter.sendMail(mailConfiguration);
+
 }
 
 
