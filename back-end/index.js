@@ -20,10 +20,48 @@ const route = require('./router/orderRoute.js');
 app.use(express.urlencoded({ extended: true }));
 
 
-app.get("/smtp-check", async (req,res)=>{////
-  await transporter.verify();
-  res.send("SMTP OK");
-});////now
+// app.get("/smtp-check", async (req,res)=>{////
+//   await transporter.verify();
+//   res.send("SMTP OK");
+// });////now
+
+
+
+
+app.use(express.urlencoded({ extended: true }));
+
+// ✅ ADD HERE
+app.get("/test-mail", async (req, res) => {
+  try {
+    const nodemailer = require("nodemailer");
+
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.MAIL_USER,
+        pass: process.env.MAIL_PASS,
+      },
+    });
+
+    await transporter.sendMail({
+      from: process.env.MAIL_USER,
+      to: process.env.MAIL_USER,
+      subject: "Test Mail",
+      text: "Hello from Render Server"
+    });
+
+    res.send("Mail sent");
+  } catch (err) {
+    console.log(err);
+    res.send("Mail failed");
+  }
+});
+
+
+
+
+
+
 
 
 app.get("/sonu",(req,res)=>{
