@@ -3,7 +3,11 @@ const cors=require('cors')
 const express=require('express');
 const app=express();
 app.use(cors({
-    origin:`${process.env.CLIENT_URL}`,
+    origin:[
+    "http://localhost:5173",
+    "https://e-commerce-web-s8m5.onrender.com"
+  ],
+
     credentials: true
 }))
 const port=process.env.PORT||8000;
