@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const User=require("../models/model.js")
 const bcrypt=require('bcrypt')
 const jwt=require('jsonwebtoken')
-const {verifyemail}=require("../emailverify/verifyEmail.js")
+const verifyemail=require("../emailverify/verifyEmail.js")
 const Session=require("../models/sessionModel.js")
 const sendOTPMail=require("../emailverify/sendOtpTOMail.js")
 const cloudinary=require('../Utils/cloudnary.js')
@@ -11,9 +11,7 @@ const cloudinary=require('../Utils/cloudnary.js')
 
 const register=async(req,res)=>{
     try {
-        const { firstName, lastName, email, password } = req.body;
-console.log(req.body);
-
+    const { firstName, lastName, email, password } = req.body;
 if (!firstName || !lastName || !email || !password) {
 return res.status(400).json({
     success: false,
@@ -28,8 +26,6 @@ return res.status(400).json({
             });
         }
         const hashpassword = await bcrypt.hash(password, 10);
-        console.log(hashpassword);
-        
         const newUser=await User.create({
             firstName,
             lastName,
@@ -39,7 +35,6 @@ return res.status(400).json({
         const token= await jwt.sign({id:newUser._id},process.env.KEY,{expiresIn:'10m'});
         await verifyemail(token,email);//we are sending email here
         newUser.token=token //we are save token in db (check in model)
-
         await newUser.save();
         res.status(201).json({
             success:true,
@@ -53,6 +48,7 @@ return res.status(400).json({
         })
     }
 }
+
 
 const Verify=async(req,res)=>{
     try {

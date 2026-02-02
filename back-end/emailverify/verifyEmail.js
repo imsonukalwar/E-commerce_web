@@ -15,7 +15,7 @@ const transporter=nodemailer.createTransport({
     secure: false,
     auth:{
         user:process.env.MAIL_USER,
-        pass:process.env.MAIL_PAS
+        pass:process.env.MAIL_PASS,
     },
   tls: {
     rejectUnauthorized: false
