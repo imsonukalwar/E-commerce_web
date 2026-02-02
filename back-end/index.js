@@ -17,7 +17,7 @@ const router=require("./router/userroute.js")
 const productRoute=require("./router/productRoute.js");
 const cartRouter = require('./router/cartRoute.js');
 const route = require('./router/orderRoute.js');
-app.use(express.urlencoded({ extended: true }));
+
 
 
 // app.get("/smtp-check", async (req,res)=>{////
