@@ -135,18 +135,18 @@ app.use((req, res, next) => {
 })
 
 // ✅ CORS MIDDLEWARE
-// app.use(cors({
-//   origin: [
-//     "http://localhost:5173",
-//     "http://localhost:5174",
-//     "https://capable-monstera-b94bcc.netlify.app"
-//   ],
-//   credentials: true
-// }))
-
 app.use(cors({
-  origin: "*"
-}));
+  origin: [
+    "http://localhost:5173",
+    "http://localhost:5174",
+    "https://capable-monstera-b94bcc.netlify.app"
+  ],
+  credentials: true
+}))
+
+// app.use(cors({
+//   origin: "*"
+// }));
 
 const port = process.env.PORT || 8000
 
@@ -155,7 +155,7 @@ app.use(express.urlencoded({ extended: true }))
 
 // -----------------------
 
-const db = require("./database/db.js")
+const connectDB = require("./database/db.js")
 const router = require("./router/userroute.js")
 const productRoute = require("./router/productRoute.js")
 const cartRouter = require("./router/cartRoute.js")
@@ -203,7 +203,7 @@ app.use("/orders", route)
 
 // -----------------------
 
-db()
+connectDB()
   .then(() => console.log("MongoDB Connected"))
   .catch((error) => console.log(error))
 
