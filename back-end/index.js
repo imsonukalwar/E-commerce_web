@@ -5,7 +5,7 @@ const app=express();
 app.use(cors({
     origin:[
     "http://localhost:5173",
-    "https://e-commerce-web-s8m5.onrender.com"
+    "https://capable-monstera-b94bcc.netlify.app"
   ],
 
     credentials: true
