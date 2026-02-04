@@ -49,7 +49,6 @@ return res.status(400).json({
     }
 }
 
-
 const Verify=async(req,res)=>{
     try {
         const aouthHeader=req.headers.authorization;
