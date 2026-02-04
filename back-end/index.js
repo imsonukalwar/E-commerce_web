@@ -77,13 +77,32 @@ app.use("/cart",cartRouter)
 app.use("/orders",route)
 
 
-db()
-.then(()=>{
+// db()
+// .then(()=>{
 
-app.listen(port,(req,res)=>{
-    console.log(`you are listem at port :${port}`);
-})
-})
-.catch((error)=>{
-    throw new Error(error)
-})
+// app.listen(port,(req,res)=>{
+//     console.log(`you are listem at port :${port}`);
+// })
+// })
+// .catch((error)=>{
+//     throw new Error(error)
+// })
+
+
+
+db()
+  .then(() => {
+    console.log("MongoDB Connected");
+  })
+  .catch((error) => {
+    console.log(error);
+  });
+
+if (!process.env.VERCEL) {
+  app.listen(port, () => {
+    console.log(`Local server running at ${port}`);
+  });
+}
+
+module.exports = app;
+
