@@ -4,13 +4,14 @@ import { Input } from "./ui/input"
 import { useDispatch } from "react-redux"
 import { toast } from "sonner"
 import { setCart } from "@/redux/ProductSlice"
+import { useNavigate } from "react-router-dom"
 
 
 const ProductDesc = ({ product }) => {
 
   const accessToken = localStorage.getItem("accessToken");
   const dispatch = useDispatch();
-
+  const nevigate=useNavigate();
   const addToCart = async (productId) => {
     try {
       const res = await axios.post(
@@ -95,9 +96,9 @@ const ProductDesc = ({ product }) => {
           Add To Cart
         </Button>
 
-        <Button variant="outline" className="rounded-2xl px-8 py-3">
+        {/* <Button onClick={nevigate(`/cart`)} variant="outline" className="rounded-2xl px-8 py-3 cursor-pointer">
           Buy Now
-        </Button>
+        </Button> */}
 
       </div>
 
