@@ -4,7 +4,7 @@ const bcrypt=require('bcrypt')
 const jwt=require('jsonwebtoken')
 const {verifyemail}=require("../emailverify/verifyEmail.js")
 const Session=require("../models/sessionModel.js")
-const sendOTPMail=require("../emailverify/sendOtpTOMail.js")
+const {sendotpMail}=require("../emailverify/sendOtpTOMail.js")
 const cloudinary=require('../Utils/cloudnary.js')
 
 
@@ -218,8 +218,9 @@ const forgotPassword=async(req,res)=>{
         user.otp=otp;
         user.otpexpiry=expOtp;
 
-        await user.save()
-        await sendOTPMail(otp,email);
+        // await user.save()
+        await user.save({ validateBeforeSave: false })
+        await sendotpMail(otp,email);
 
         return res.status(200).json({
             success:true,
