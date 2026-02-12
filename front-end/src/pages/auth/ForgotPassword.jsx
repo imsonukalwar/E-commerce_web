@@ -68,13 +68,14 @@ const navigate=useNavigate()
 
 
   const handleSubmit = async (e) => {
+    console.log("VITE_URL =", import.meta.env.VITE_URL);
     e.preventDefault();
     setLoading(true);
 
     try {
   const res = await axios.post(
     `${import.meta.env.VITE_URL}/forgot-password`,
-    { email }
+    { email:email }
   );
 
   setMessage(res.data.message);

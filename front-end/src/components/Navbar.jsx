@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Button } from "@/components/ui/button";
 import { setUser } from "@/redux/userSlice";
 import toast from "react-hot-toast";
-
+import ele from "../assets/ele1.jpg"
 const Navbar = () => {
 
   const { user } = useSelector((state) => state.user);
@@ -38,11 +38,11 @@ const Navbar = () => {
         {/* LOGO */}
         <Link to="/" className="flex items-center gap-2">
           <img
-            src="https://simpleicons.org/icons/shopify.svg"
-            className="w-8 h-8"
+            src={ele}
+            className="w-15 h-16"
           />
-          <span className="text-xl font-bold text-purple-600">
-            Shopify
+          <span className="text-xl font-bold text-blue-400">
+            ElectroMart
           </span>
         </Link>
 
