@@ -69,7 +69,8 @@ const Verify=async(req,res)=>{
         try {
             decode=jwt.verify(token,process.env.KEY)
         } catch (error) {
-            if(error.name==="TokenExpiredErorr"){
+            // if(error.name==="TokenExpiredErorr"){
+            if(error.name==="TokenExpiredError"){
                 return res.status(400).json({
                     success:false,
                     message:"the register token has Expire"
@@ -162,11 +163,15 @@ const login=async(req,res)=>{
 //generate token
         const accessToken=await jwt.sign({id:exixstUser._id},process.env.KEY,{expiresIn:'1h'})
         const refressToken=await jwt.sign({id:exixstUser._id},process.env.KEY,{expiresIn:'10d'})
-        exixstUser.Islogin=true;
+        // exixstUser.Islogin=true;
+        exixstUser.isLoggedIn=true;
         await exixstUser.save();
 //check exixsting Session and Delete
         const existingSession=await Session.findOne({userId:exixstUser._id})
-        if(!existingSession){
+        // if(!existingSession){
+        //     await Session.deleteOne({userId:exixstUser._id})
+        // }
+        if(existingSession){
             await Session.deleteOne({userId:exixstUser._id})
         }
 //create a new session 
@@ -190,7 +195,8 @@ const logout=async(req,res)=>{
     try {
         const userid=req.id
         await Session.deleteMany({userId:userid})
-        await User.findOneAndUpdate(userid,{isLoggedIn:false})
+        // await User.findOneAndUpdate(userid,{isLoggedIn:false})
+        await User.findByIdAndUpdate(userid,{isLoggedIn:false})
         return res.status(200).json({
     success: true,
     message: "Logged out successfully",

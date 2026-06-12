@@ -102,7 +102,10 @@ const AdminOrders = () => {
                   </td>
 
                   <td className="px-6 py-4 border-b">
-                    <p className="font-semibold">{order.user?.name}</p>
+                    {/* <p className="font-semibold">{order.user?.name}</p> */}
+                    <p className="font-semibold">
+                      {order.user ? `${order.user.firstName} ${order.user.lastName}` : "Unknown"}
+                    </p>
                     <p className="text-xs text-gray-500">
                       {order.user?.email}
                     </p>
@@ -170,7 +173,8 @@ const AdminOrders = () => {
 
               <div>
                 <p className="font-semibold">
-                  {order.user?.name}
+                  {/* {order.user?.name} */}
+                  {order.user ? `${order.user.firstName} ${order.user.lastName}` : "Unknown"}
                 </p>
                 <p className="text-sm text-gray-500">
                   {order.user?.email}

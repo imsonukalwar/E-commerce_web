@@ -134,7 +134,8 @@ const getAllOrdersAdmin = async(req, res) =>{
 
         const orders = await Order.find()
         .sort({createdAt: -1})
-        .populate("user", "name email") // populate user info
+        // .populate("user", "name email") // populate user info
+        .populate("user", "firstName lastName email") // populate user info
         .populate("products.productId", "productName productPrise") // populate product info
 
         res.json({

@@ -61,7 +61,8 @@ const AddProduct = () => {
         }
       })
       if(res.data.success){
-        dispatch(setProducts([...products,res.data.product]))
+        // dispatch(setProducts([...products,res.data.product]))
+        dispatch(setProducts([...products, res.data.Product]))
         toast.success(res.data.message)
     setProductData({
     productName:"",

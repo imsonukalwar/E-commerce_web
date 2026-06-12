@@ -2,18 +2,7 @@ const mongoose=require('mongoose')
 const {Schema}=mongoose;
 
 const user=new Schema({
-    // firstName:{
-    //     type:String,
-    //     required:true,
-    //     minlength:3,
-    //     maxlength:15,
-    // },
-    // lastName:{
-    //     type:String,
-    //     required:true,
-    //     minlength:3,
-    //     maxlength:15,
-    // },
+
 
   firstName: {
     type: String,

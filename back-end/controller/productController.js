@@ -92,9 +92,14 @@ const deleteProduct=async(req,res)=>{
             })
         }
         //dlelte image from cloudnary
-        if(product.productImg&&product.productImg.length>0){
-            for (let img of product.productImg) {
-                const result=await cloudnary.uploader.destroy(img.public_id)
+        // if(product.productImg&&product.productImg.length>0){
+        //     for (let img of product.productImg) {
+        //         const result=await cloudnary.uploader.destroy(img.public_id)
+        //     }
+        // }
+        if(product.productImage&&product.productImage.length>0){
+            for (let img of product.productImage) {
+                const result=await cloudinary.uploader.destroy(img.public_id)
             }
         }
         //delet from mbd
@@ -145,7 +150,8 @@ const updateProduct=async(req,res)=>{
         if(req.files&& req.files.length>0){
             for (const file of req.files) {
                 const fileUri=getDataUri(file)
-                const result =await cloudinary.uploader.upload(fileUri,{folser:"mern_products"})
+                // const result =await cloudinary.uploader.upload(fileUri,{folser:"mern_products"})
+                const result =await cloudinary.uploader.upload(fileUri,{folder:"mern_products"})
                 updatedImages.push({
                     url:result.secure_url,
                     public_id:result.public_id

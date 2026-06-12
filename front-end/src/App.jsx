@@ -61,9 +61,13 @@ const router=createBrowserRouter([
   {
     path:'/profile/:userId',
     element:<>
-    <ProtectedRoute/>
+    {/* <ProtectedRoute/>
     <Navbar/>
-    <Profile/>
+    <Profile/> */}
+    <ProtectedRoute>
+      <Navbar/>
+      <Profile/>
+    </ProtectedRoute>
     </>
   },
   {
@@ -83,9 +87,13 @@ const router=createBrowserRouter([
   {
     path:'/cart',
     element:<>
-    <ProtectedRoute/>
+    {/* <ProtectedRoute/>
     <Navbar/>
-    <Cart/>
+    <Cart/> */}
+    <ProtectedRoute>
+      <Navbar/>
+      <Cart/>
+    </ProtectedRoute>
     </>
   },
   {
