@@ -195,6 +195,15 @@ app.get("/sonu", (req, res) => {
   res.send("hello sonu")
 })
 
+app.get("/env-check", (req, res) => {
+  res.json({
+    RESEND_API_KEY_PRESENT: !!process.env.RESEND_API_KEY,
+    MAIL_USER_PRESENT: !!process.env.MAIL_USER,
+    MAIL_PASS_PRESENT: !!process.env.MAIL_PASS,
+    CLIENT_URL: process.env.CLIENT_URL || "NOT SET"
+  })
+})
+
 // ROUTES
 app.use("/", router)
 app.use("/product", productRoute)
